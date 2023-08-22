@@ -1,16 +1,41 @@
 var altura = 0
 var largura = 0
 var vidas = 1
+var tempo = 30
+var criamosquitoTempo = 1500
+
+var nivel = window.location.search
+nivel = nivel.replace('?', '')
+
+if(nivel=== 'normal'){
+    criamosquitoTempo = 2800
+}else if(nivel === 'dificil'){
+    criamosquitoTempo= 1000
+}else if (nivel ==='chucknorris'){
+    criamosquitoTempo = 700
+}
+
 
 function ajustaTamanhoPalcoJogo() {
 
     altura = innerHeight
     largura = innerWidth
 
-    // console.log(altura, largura)
+    console.log(altura, largura)
 }
 
 ajustaTamanhoPalcoJogo()
+
+var cronometro = setInterval(function(){
+    tempo -= 1 
+    if(tempo<0){
+        clearInterval(cronometro)
+        clearInterval(criamosquito)
+        window.location.href = 'vitoria.html'
+    }else{
+        document.getElementById('cronometro').innerHTML = tempo
+    }
+}, 1000)
 
 function posicaoRandomica() {
 
@@ -18,14 +43,14 @@ function posicaoRandomica() {
 
     if(document.getElementById('mosquito')){
         document.getElementById("mosquito").remove()
-
-    }
-
-    if(vidas>3){
+if(vidas>3){
      location.href='fim.html'   
  }else{
         document.getElementById('v'+vidas).src = 'imagens/coracao_vazio.png'
         vidas++
+    }
+
+    
     }
 
     var posicaoX = Math.floor(Math.random() * largura) - 90
@@ -33,6 +58,8 @@ function posicaoRandomica() {
 
     posicaoX = posicaoX < 0 ? 0 : posicaoX
     posicaoY = posicaoY < 0 ? 0 : posicaoY
+
+    console.log(posicaoX,posicaoY)
     // condicação ? expressão1 : expressão2
 
     // Criar o elemento mosquito
@@ -44,15 +71,15 @@ function posicaoRandomica() {
     mosquito.style.position = 'absolute'
     mosquito.id="mosquito"
     mosquito.onclick= function(){this.remove()}
-
     document.body.appendChild(mosquito)
+    console.log(ladoAleatorio())
 
 }
 
-setInterval(function(){
+var criamosquito= setInterval(function(){
     posicaoRandomica()
 
-},1800)
+},criamosquitoTempo)
 
 posicaoRandomica()
 
